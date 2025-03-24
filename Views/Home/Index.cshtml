@@ -1,9 +1,66 @@
-﻿@{
+﻿@using System.Web
+@{
     ViewData["Title"] = "Home Page";
+    var dbCodeFirstDemoDbContext = ViewBag.Context as DbCodeFirstDemo.Models.DataBase.DbCodeFirstDemoDbContext;    
 }
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
 
+    .blog {
+        border: 2px solid black;
+        margin: 20px;
+        padding: 10px;
+    }
+
+    .post {
+        border: 1px solid gray;
+        margin: 10px;
+        padding: 10px;
+    }
+
+    .comments {
+        background: #f8f8f8;
+        padding: 5px;
+        margin-top: 5px;
+    }
+
+    .comment {
+        border-bottom: 1px solid #ddd;
+        padding: 5px;
+    }
+</style>
 <div class="text-center">
     <h1 class="display-4">Présentation des migrations EFCore</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <p>Ressources Microsft :  <a href="https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli">Vue d'ensemble Migrations</a>. <a href="https://learn.microsoft.com/en-us/ef/core/modeling/data-seeding">Vue d'ensemble DataSeeding</a>.</p>
+    @if (dbCodeFirstDemoDbContext == null || dbCodeFirstDemoDbContext.Blogs == null)
+    {
+        <p>Il ny'a pas de blog et peut etre meme pas de base de données</p>
+    }
+    else if (dbCodeFirstDemoDbContext?.Blogs != null)
+        @foreach (var itemBlog in dbCodeFirstDemoDbContext.Blogs.ToList())
+        {
+            <section class="blog"><h2>Blog @itemBlog.Id @Html.DisplayFor(modelItem => itemBlog.Url) Created on @Html.DisplayFor(modelItem => itemBlog.Creation)</h2></section>
+            @if (itemBlog.Pages != null && itemBlog.Pages.Count > 0)
+                @foreach (var itemPage in itemBlog.Pages)
+                {
+                    <article class="post">
+                        <h3>Article @itemPage.Id</h3>
+                        @Html.Raw(HttpUtility.HtmlDecode(itemPage.Html))
+                        @if (itemPage.Comments != null && itemPage.Comments.Count > 0)
+                        {
+                            <div class="comments">
+                                <h4>Commentaires</h4>
+                                @foreach (var itemComment in itemPage.Comments)
+                                {
+                                    @Html.Raw(HttpUtility.HtmlDecode(itemComment.Html))
+                                }
+                            </div>
+                        }
+                    </article>
+                }
+        }
+
 </div>
+

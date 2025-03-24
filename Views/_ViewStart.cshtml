@@ -1,3 +1,5 @@
-﻿@{
+﻿@inject DbCodeFirstDemo.Models.DataBase.DbCodeFirstDemoDbContext _dbCodeFirstDemoDbContext;
+@{
     Layout = "_Layout";
+    ViewBag.Context = _dbCodeFirstDemoDbContext;
 }

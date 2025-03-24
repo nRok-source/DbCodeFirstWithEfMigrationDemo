@@ -1,9 +1,53 @@
+using DbCodeFirstDemo.Models.DataBase;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddDbContext<DbCodeFirstDemoDbContext>();
 var app = builder.Build();
+
+#region "Initialisation d'un context de BDD pour voir si l'on doit appliquer des migrations au démarrage de l'application"
+
+using var serviceScope = app.Services.CreateScope();
+using var dbCodeFirstDemoDbContext = serviceScope.ServiceProvider.GetService<DbCodeFirstDemoDbContext>();
+
+if (dbCodeFirstDemoDbContext?.Database.GetPendingMigrations().Count() > 0)
+    dbCodeFirstDemoDbContext.Database.Migrate();
+
+if (dbCodeFirstDemoDbContext != null && dbCodeFirstDemoDbContext.Blogs != null)
+{
+    var testBlog = dbCodeFirstDemoDbContext.Blogs.FirstOrDefault();
+    if (testBlog == null)
+    {
+        dbCodeFirstDemoDbContext.Blogs.AddRange(new Blog { Url = "http://blog1.com", Pages = new List<Page>() {
+                    new Page { Title = "Article 1", Html="<p>Contenu de l'article 1...</p>",
+                        Comments =new List<Comment>() {
+                            new Comment{ Html = "<div class=\"comment\">Commentaire 1 sur l'article 1</div>",   },
+                            new Comment{ Html = "<div class=\"comment\">Commentaire 2 sur l'article 1</div>",   },
+                            new Comment{ Html = "<div class=\"comment\">Commentaire 3 sur l'article 1</div>",   },
+                            new Comment{ Html = "<div class=\"comment\">Commentaire 4 sur l'article 1</div>",   },
+                        }},
+                    new Page { Title = "Article 2", Html="<p>Contenu de l'article 2...</p>",
+                        Comments =new List<Comment>() {
+                            new Comment{ Html = "<div class=\"comment\">Commentaire 1 sur l'article 2</div>",   },
+                            new Comment{ Html = "<div class=\"comment\">Commentaire 2 sur l'article 2</div>",   },
+                            new Comment{ Html = "<div class=\"comment\">Commentaire 3 sur l'article 2</div>",   },
+                            new Comment{ Html = "<div class=\"comment\">Commentaire 4 sur l'article 2</div>",   },
+                        }},
+                    new Page { Title = "Article 3", Html="<p>Contenu de l'article 3...</p>",
+                        Comments =new List<Comment>() {
+                            new Comment{ Html = "<div class=\"comment\">Commentaire 1 sur l'article 3</div>",   },
+                            new Comment{ Html = "<div class=\"comment\">Commentaire 2 sur l'article 3</div>",   },
+                            new Comment{ Html = "<div class=\"comment\">Commentaire 3 sur l'article 3</div>",   },
+                            new Comment{ Html = "<div class=\"comment\">Commentaire 4 sur l'article 3</div>",   },
+                        }}},                           }            );
+        await dbCodeFirstDemoDbContext.SaveChangesAsync();
+    }
+}
+
+#endregion
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
