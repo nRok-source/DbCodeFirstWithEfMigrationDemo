@@ -21,7 +21,7 @@ if (dbCodeFirstDemoDbContext?.Database.GetPendingMigrations().Count() > 0)
     dbCodeFirstDemoDbContext.Database.Migrate();
 
 //DataSeeding
-if (dbCodeFirstDemoDbContext != null)// dbCodeFirstDemoDbContext.Blogs != null)
+if (dbCodeFirstDemoDbContext != null)
 {
     bool exists = dbCodeFirstDemoDbContext.Database.SqlQuery<string>($"SELECT name AS Value FROM sys.tables where name = 'Blog'").FirstOrDefault() == "Blog";
     if (exists)
@@ -32,6 +32,32 @@ if (dbCodeFirstDemoDbContext != null)// dbCodeFirstDemoDbContext.Blogs != null)
             dbCodeFirstDemoDbContext.Blogs.AddRange(new Blog
             {
                 Url = "http://blog1.com",
+                Pages = new List<Page>() {
+                    new Page { Title = "Article 1", Html="<p>Contenu de l'article 1...</p>",
+                        Comments =new List<Comment>() {
+                            new Comment{ Html = "<div class=\"comment\">Commentaire 1 sur l'article 1</div>",   },
+                            new Comment{ Html = "<div class=\"comment\">Commentaire 2 sur l'article 1</div>",   },
+                            new Comment{ Html = "<div class=\"comment\">Commentaire 3 sur l'article 1</div>",   },
+                            new Comment{ Html = "<div class=\"comment\">Commentaire 4 sur l'article 1</div>",   },
+                        }},
+                    new Page { Title = "Article 2", Html="<p>Contenu de l'article 2...</p>",
+                        Comments =new List<Comment>() {
+                            new Comment{ Html = "<div class=\"comment\">Commentaire 1 sur l'article 2</div>",   },
+                            new Comment{ Html = "<div class=\"comment\">Commentaire 2 sur l'article 2</div>",   },
+                            new Comment{ Html = "<div class=\"comment\">Commentaire 3 sur l'article 2</div>",   },
+                            new Comment{ Html = "<div class=\"comment\">Commentaire 4 sur l'article 2</div>",   },
+                        }},
+                    new Page { Title = "Article 3", Html="<p>Contenu de l'article 3...</p>",
+                        Comments =new List<Comment>() {
+                            new Comment{ Html = "<div class=\"comment\">Commentaire 1 sur l'article 3</div>",   },
+                            new Comment{ Html = "<div class=\"comment\">Commentaire 2 sur l'article 3</div>",   },
+                            new Comment{ Html = "<div class=\"comment\">Commentaire 3 sur l'article 3</div>",   },
+                            new Comment{ Html = "<div class=\"comment\">Commentaire 4 sur l'article 3</div>",   },
+                        }}},
+            }, 
+            new Blog
+            {
+                Url = "http://blog2.com",
                 Pages = new List<Page>() {
                     new Page { Title = "Article 1", Html="<p>Contenu de l'article 1...</p>",
                         Comments =new List<Comment>() {

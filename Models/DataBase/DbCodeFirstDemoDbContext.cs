@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore.Proxies;
 
 namespace DbCodeFirstDemo.Models.DataBase
 {
@@ -31,12 +30,11 @@ namespace DbCodeFirstDemo.Models.DataBase
     public partial class Blog
     {
         [Key]
-
         public int Id { get; set; }
-         public string? Url { get; set; }
+        public string? Url { get; set; }
         public string? Html { get; set; }
         public DateTimeOffset Creation { get; set; }
-        public DateTimeOffset? MAJ { get; set; }
+        public DateTimeOffset MAJ { get; set; }
         [InverseProperty("Blog")]
         public virtual ICollection<Page> Pages { get; set; } = new List<Page>();
     }
@@ -45,11 +43,11 @@ namespace DbCodeFirstDemo.Models.DataBase
     [Index("BlogId", Name = "IX_Page_BlogId")]
     public partial class Page
     {
-    [Key]
+        [Key]
         public int Id { get; set; }
         public string? Title { get; set; }
         public string? Html { get; set; }
-        
+
         public int BlogId { get; set; }
         public DateTimeOffset Creation { get; set; }
         public DateTimeOffset? MAJ { get; set; }
@@ -66,15 +64,15 @@ namespace DbCodeFirstDemo.Models.DataBase
     [Index("PageId", Name = "IX_Comment_PageId")]
     public partial class Comment
     {
-    [Key]
+        [Key]
         public int Id { get; set; }
 
         public string? Url { get; set; }
         public string? Title { get; set; }
         public string? Text { get; set; }
         public string? Author { get; set; }
-        public string? Html { get;set; }
-        
+        public string? Html { get; set; }
+
         public int PageId { get; set; }
         public DateTimeOffset Creation { get; set; }
         public DateTimeOffset? MAJ { get; set; }

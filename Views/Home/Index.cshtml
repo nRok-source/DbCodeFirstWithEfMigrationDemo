@@ -1,10 +1,12 @@
 ﻿@using System.Web
+@using DbCodeFirstDemo.Models.DataBase
 @using Microsoft.EntityFrameworkCore
+@using System.ComponentModel.DataAnnotations.Schema
 @{
     ViewData["Title"] = "Home Page";
 
-    var dbCodeFirstDemoDbContext = ViewBag.Context as DbCodeFirstDemo.Models.DataBase.DbCodeFirstDemoDbContext;    
-    bool exists = dbCodeFirstDemoDbContext?.Database.SqlQuery<string>($"SELECT name AS Value FROM sys.tables where name = 'Blog'").FirstOrDefault() == "Blog";
+    var dbCodeFirstDemoDbContext = ViewBag.Context as DbCodeFirstDemo.Models.DataBase.DbCodeFirstDemoDbContext;     
+    bool exists = dbCodeFirstDemoDbContext.Database.SqlQuery<string>($"SELECT name AS Value FROM sys.tables where name = 'Blog'").FirstOrDefault() == "Blog";
 }
 <style>
     body {
@@ -64,6 +66,5 @@
                     </article>
                 }
         }
-
 </div>
 
