@@ -1,7 +1,10 @@
 ﻿@using System.Web
+@using Microsoft.EntityFrameworkCore
 @{
     ViewData["Title"] = "Home Page";
+
     var dbCodeFirstDemoDbContext = ViewBag.Context as DbCodeFirstDemo.Models.DataBase.DbCodeFirstDemoDbContext;    
+    bool exists = dbCodeFirstDemoDbContext?.Database.SqlQuery<string>($"SELECT name AS Value FROM sys.tables where name = 'Blog'").FirstOrDefault() == "Blog";
 }
 <style>
     body {
@@ -33,8 +36,8 @@
 </style>
 <div class="text-center">
     <h1 class="display-4">Présentation des migrations EFCore</h1>
-    <p>Ressources Microsft :  <a href="https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli">Vue d'ensemble Migrations</a>. <a href="https://learn.microsoft.com/en-us/ef/core/modeling/data-seeding">Vue d'ensemble DataSeeding</a>.</p>
-    @if (dbCodeFirstDemoDbContext == null || dbCodeFirstDemoDbContext.Blogs == null)
+    <p>Ressources Microsft :  <a href="https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli">Migrations</a>. <a href="https://learn.microsoft.com/en-us/ef/core/modeling/data-seeding">DataSeeding</a>.</p>
+    @if (!exists)
     {
         <p>Il ny'a pas de blog et peut etre meme pas de base de données</p>
     }

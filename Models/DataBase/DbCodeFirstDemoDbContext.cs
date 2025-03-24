@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore.Proxies;
 
 namespace DbCodeFirstDemo.Models.DataBase
 {
@@ -16,6 +17,7 @@ namespace DbCodeFirstDemo.Models.DataBase
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
             var _configurationRoot = configurationBuilder.Build();
+            optionsBuilder.UseLazyLoadingProxies();
             optionsBuilder.UseSqlServer(_configurationRoot.GetConnectionString("DemoCodeFirst"));
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -25,45 +27,51 @@ namespace DbCodeFirstDemo.Models.DataBase
         }
     }
 
-    [Table("Blogs")]
-    public class Blog
+    [Table("Blog")]
+    public partial class Blog
     {
+        [Key]
+
         public int Id { get; set; }
          public string? Url { get; set; }
         public string? Html { get; set; }
         public DateTimeOffset Creation { get; set; }
-        public DateTimeOffset MAJ { get; set; }
+        public DateTimeOffset? MAJ { get; set; }
         [InverseProperty("Blog")]
         public virtual ICollection<Page> Pages { get; set; } = new List<Page>();
     }
 
     [Table("Page")]
-    public class Page
+    [Index("BlogId", Name = "IX_Page_BlogId")]
+    public partial class Page
     {
+    [Key]
         public int Id { get; set; }
-        public string? Url { get; set; }
         public string? Title { get; set; }
         public string? Html { get; set; }
         
         public int BlogId { get; set; }
         public DateTimeOffset Creation { get; set; }
         public DateTimeOffset? MAJ { get; set; }
+
         [ForeignKey("BlogId")]
         [InverseProperty("Pages")]
         public virtual Blog Blog { get; set; }
-
         [InverseProperty("Page")]
         public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
+
     }
 
     [Table("Comment")]
-    public class Comment
+    [Index("PageId", Name = "IX_Comment_PageId")]
+    public partial class Comment
     {
+    [Key]
         public int Id { get; set; }
 
         public string? Url { get; set; }
         public string? Title { get; set; }
-        //public string? Text { get; set; }
+        public string? Text { get; set; }
         public string? Author { get; set; }
         public string? Html { get;set; }
         

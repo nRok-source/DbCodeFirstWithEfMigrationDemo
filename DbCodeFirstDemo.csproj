@@ -6,11 +6,18 @@
 		<ProjectGuid>{E2CEBBAF-6DF7-41E9-815D-9AD4CF90C844}</ProjectGuid>
 	</PropertyGroup>
 	<ItemGroup>
+	  <Compile Remove="Models\Blog.cs" />
+	  <Compile Remove="Models\Comment.cs" />
+	  <Compile Remove="Models\eptfCodeFirstDbContext.cs" />
+	  <Compile Remove="Models\Page.cs" />
+	</ItemGroup>
+	<ItemGroup>
 	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.3" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.3">
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	    <PrivateAssets>all</PrivateAssets>
 	  </PackageReference>
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="9.0.3" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.3" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.3" />
 	</ItemGroup>
